@@ -1,0 +1,102 @@
+---
+title: "HW2"
+format: html
+editor: visual
+---
+
+## Task 1: Basic Vector Practice
+
+Performing all parts of task 1 in this chunk
+
+```{r}
+#creating vectors of pre and post treatment blood pressure values 
+pre= c( 120, 151, 125, 126, 115, 132, 132, 129, 134, 139, 127, 122, 127, 135, 133, 128, 147, 138, 140, 132)
+
+post= c(127, 145, 135, 122, 115, 122, 123, 126, 126, 129, 132, 146, 120, 114, 121, 120, 128, 120, 133, 115)
+
+#assigning subject names to vectors 
+paste("Subject", 1:20, sep = "_")->subjs
+
+names(pre) <- subjs
+pre
+names(post) <- subjs
+post
+
+#change in blood pressure
+BPchange<- post-pre
+BPchange
+
+#average decrease in BP
+BPavgdec<- mean(BPchange)
+BPavgdec 
+
+#determine which patients experienced a decrease in bp after treatment 
+decreasedBP_indices<- which(BPchange >0)
+decreasedBP_names<- names(BPchange)[decreasedBP_indices]
+decreasedBP_names
+
+#subset the vector of differences to only return those that have a positive change 
+BPpos_changes<- BPchange[BPchange >0]
+BPpos_changes
+
+#calculate the avg decrease in BP for those where the blood pressure decreased (positive change)
+avgdec<- mean(BPpos_changes)
+avgdec
+```
+
+## Task 2: Basic Data Frame Practice
+
+performing all parts of task 2 in this chunk
+
+```{r}
+#1 creating data frame of above. did not include subjs in the data.frame() because it automatically creates a column of the subject IDs due to the vectors having the subject IDs as their names 
+data<- data.frame(pre,post,BPchange)
+data
+
+#question 2 subsetting data for positive BP change
+data[data$BPchange < 0,]
+
+#3 creating a new column in the dataframe for post treatment bp less than 120
+data$bp_lessthan_120 <- data$post<120
+
+#knitting pretty 
+knitr::kable(data)
+
+```
+
+## Task 3: List practice
+
+performing all parts of task 3 in this chunk
+
+```{r}
+#question 1 creating vectors of BP changes for the placebos 
+preP<- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+postP<- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+
+#assigning names to each vector 
+paste("Subject", 1:10, sep = "_")->subjsP
+names(preP)<- subjsP
+names(postP)<- subjsP
+
+#creating BP change vector 
+BPchangeP <- postP-preP
+
+#creating true/false vector for post placebo bp under 120 
+BP_lessthan_120P <- postP<120
+
+#creating dataframe of these vectors 
+placebodata<- data.frame(preP,postP,BPchangeP,BP_lessthan_120P)
+
+#question 2 creating list of 2 elements 
+list("treatment"= data, "placebo"=placebodata) -> list
+
+#question 3 accessing element 1 of the list 
+list[1]
+list[[1]]
+list$treatment
+
+#question 4 accessing preP of placebo dataset in one command 
+list$placebo$preP
+
+
+```
